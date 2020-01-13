@@ -11,6 +11,9 @@ mypy = "*"
 [packages]
 pandas = "*"
 scipy = "*"
+matplotlib = "*"
+tkinter = "*"
+python-tk = "*"
 
 [requires]
 python_version = "3.8"
