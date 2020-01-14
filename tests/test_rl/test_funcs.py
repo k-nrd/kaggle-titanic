@@ -1,9 +1,9 @@
-from pandas import read_csv
 import numpy as np
+from pandas import read_csv
 from scipy.optimize import minimize
-from costFunction import lrCostFunction, gradient
-from predict import predict
-from sigmoid import sigmoid
+
+from regularizedLogistic.functions import costFunction, gradient, classify
+from utils import sigmoid
 
 data = read_csv("test_data.txt").to_numpy()
 X = data[:, [0, 1]]
@@ -20,11 +20,11 @@ print("X:\n", X[:5, :])
 print("y:\n", y[:5].T)
 print("-------------------------------------------------")
 
-J = lrCostFunction(initial_theta, X, y, lmbda)
+J = costFunction(initial_theta, X, y, lmbda)
 print("Cost at initial theta (zeros): ", J)
 print("-------------------------------------------------")
 
-J = lrCostFunction(test_theta, X, y, lmbda)
+J = costFunction(test_theta, X, y, lmbda)
 print("Cost at test theta: ", J)
 print("-------------------------------------------------")
 
@@ -32,7 +32,7 @@ print("-------------------------------------------------")
 input("Program paused. Press ENTER to continue.")
 
 res = minimize(
-    lrCostFunction,
+    costFunction,
     initial_theta,
     args=(X, y, lmbda),
     method="BFGS",
@@ -42,7 +42,7 @@ res = minimize(
 theta = res.x
 print("Optimization results:\n", res)
 print("-------------------------------------------------")
-J = lrCostFunction(theta, X, y, lmbda)
+J = costFunction(theta, X, y, lmbda)
 print("Cost at optimal theta: ", J)
 
 prob = sigmoid(np.array([[1, 45, 85]]).dot(theta))
@@ -52,6 +52,6 @@ print(
 print("Expected value: 0.775 +/- 0.002\n")
 
 
-p = predict(theta, X)
+p = classify(theta, X)
 print("Train Accuracy: ", np.mean(p == y) * 100)
 print("Expected accuracy (approx): 89.0")

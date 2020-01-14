@@ -1,8 +1,8 @@
 import numpy as np
-from .utils import sigmoid
+from utils import sigmoid
 
 
-def lrCostFunction(theta: np.array, X: np.array, y: np.array, lmbda: float) -> float:
+def costFunction(theta: np.array, X: np.array, y: np.array, lmbda: float) -> float:
     # get # of examples
     m = len(X)
 
@@ -39,3 +39,11 @@ def gradient(theta: np.array, X: np.array, y: np.array, lmbda: float) -> np.arra
     grad[1:] = grad[1:] + grad_reg_term
 
     return grad
+
+
+def classify(theta: np.array, X: np.array) -> np.array:
+    p = sigmoid(X.dot(theta))
+    p[p >= 0.5] = 1
+    p[p < 0.5] = 0
+
+    return p.astype(int)
