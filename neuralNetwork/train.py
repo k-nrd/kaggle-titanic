@@ -1,6 +1,6 @@
 from typing import Callable
 import numpy as np
-from scipy.optimize import minimize, fmin_cg
+from scipy.optimize import fmin_cg, fmin_ncg
 
 from neuralNetwork.functions import forwardProp
 from neuralNetwork.utils import initializeWeights, meltParams, setupVars, reshapeParams
@@ -19,7 +19,7 @@ def train(
     initialTheta2 = initializeWeights(hiddenLayerSize + 1, k)
     initialNNParams = meltParams(initialTheta1, initialTheta2)
 
-    res = fmin_cg(
+    resCG = fmin_cg(
         costFunction,
         initialNNParams,
         gradient,
@@ -27,12 +27,12 @@ def train(
         maxiter=1000,
     )
 
-    print("Optimization results:\n", res)
+    print("CG optimization results:\n", resCG)
     print(
         "--------------------------------------------------------------------------------"
     )
 
-    return res
+    return resCG
 
 
 def classify(nnParams: np.array, hiddenLayerSize: int, k: int, X: np.array) -> np.array:
